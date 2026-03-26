@@ -1,0 +1,64 @@
+.job-detail {
+  min-height: 100vh;
+  padding: 48px 24px;
+  background: var(--surface-2);
+}
+.job-detail .detail-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.job-detail .detail-card {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 48px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.job-detail .detail-card h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 16px;
+}
+.job-detail .detail-row {
+  display: flex;
+  gap: 8px;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.job-detail .detail-row .detail-label {
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 130px;
+  flex-shrink: 0;
+}
+.job-detail .detail-row .detail-value {
+  color: var(--gray-1);
+}
+.job-detail .detail-apply {
+  margin-top: 16px;
+  display: inline-block;
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: all var(--transition);
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(79,70,229,0.35);
+}
+.job-detail .detail-apply:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(79,70,229,0.5);
+}
+
+@media (max-width: 600px) {
+  .job-detail .detail-card { padding: 28px 20px; }
+  .job-detail .detail-row { flex-direction: column; gap: 2px; }
+  .job-detail .detail-row .detail-label { min-width: unset; }
+}

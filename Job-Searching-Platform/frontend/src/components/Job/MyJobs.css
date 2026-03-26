@@ -1,0 +1,103 @@
+.my-jobs {
+  min-height: 100vh;
+  padding: 48px 24px;
+  background: var(--surface-2);
+}
+.my-jobs .mj-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.my-jobs .mj-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.my-jobs .mj-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  display: flex;
+  gap: 24px;
+  transition: all var(--transition);
+}
+.my-jobs .mj-card:hover {
+  box-shadow: var(--shadow-md);
+}
+.my-jobs .mj-card .mj-fields {
+  flex: 3;
+  display: flex;
+  gap: 24px;
+}
+.my-jobs .mj-card .mj-short {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.my-jobs .mj-card .mj-long {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.my-jobs .mj-card .mj-field-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.my-jobs .mj-card input,
+.my-jobs .mj-card select,
+.my-jobs .mj-card textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  outline: none;
+  transition: all var(--transition);
+  width: 100%;
+}
+.my-jobs .mj-card input:enabled,
+.my-jobs .mj-card select:enabled,
+.my-jobs .mj-card textarea:enabled {
+  border-color: var(--primary-light);
+  background: var(--surface);
+}
+.my-jobs .mj-card input:disabled,
+.my-jobs .mj-card select:disabled,
+.my-jobs .mj-card textarea:disabled {
+  color: var(--gray-2);
+}
+.my-jobs .mj-card textarea { min-height: 80px; resize: vertical; }
+.my-jobs .mj-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+.my-jobs .mj-actions .mj-edit-row {
+  display: flex;
+  gap: 10px;
+}
+.my-jobs .mj-empty {
+  text-align: center;
+  color: var(--gray-2);
+  padding: 60px 0;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 900px) {
+  .my-jobs .mj-card { flex-direction: column; }
+  .my-jobs .mj-card .mj-fields { flex-direction: column; }
+  .my-jobs .mj-actions { flex-direction: row; justify-content: flex-start; }
+}

@@ -1,76 +1,49 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../../main";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { FiSun, FiMoon } from "react-icons/fi";
+import { useAuth } from "../../hooks/useAuth";
+import { useTheme } from "../../hooks/useTheme";
+import "./Navbar.css";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
-  const { isAuthorized, setIsAuthorized, user } = useContext(Context);
-  const navigateTo = useNavigate();
+  const { isAuthorized, user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
-  const handleLogout = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:4004/api/v1/user/logout",
-        {
-          withCredentials: true,
-        }
-      );
-      toast.success(response.data.message);
-      setIsAuthorized(false);
-      navigateTo("/login");
-    } catch (error) {
-      toast.error(error.response.data.message), setIsAuthorized(true);
-    }
-  };
+  if (!isAuthorized) return null;
 
   return (
-    <nav className={isAuthorized ? "navbarShow" : "navbarHide"}>
-      <div className="container">
-        {/* <div className="logo">
-          <img src="/JobZee-logos__white.png" alt="logo" />
-        </div> */}
-        <ul className={!show ? "menu" : "show-menu menu"}>
+    <nav className="navbar">
+      <div className="nav-inner">
+        <Link to="/" className="nav-logo">
+          Job<span>.Com</span>
+        </Link>
+        <ul className={`nav-menu ${show ? "open" : ""}`}>
+          <li><Link to="/" onClick={() => setShow(false)}>Home</Link></li>
+          <li><Link to="/job/getall" onClick={() => setShow(false)}>All Jobs</Link></li>
           <li>
-            <Link to={"/"} onClick={() => setShow(false)}>
-              HOME
+            <Link to="/applications/me" onClick={() => setShow(false)}>
+              {user?.role === "Employer" ? "Applicants" : "My Applications"}
             </Link>
           </li>
-          <li>
-            <Link to={"/job/getall"} onClick={() => setShow(false)}>
-              ALL JOBS
-            </Link>
-          </li>
-          <li>
-            <Link to={"/applications/me"} onClick={() => setShow(false)}>
-              {user && user.role === "Employer"
-                ? "APPLICANT'S"
-                : "MY APPLICATIONS"}
-            </Link>
-          </li>
-          {user && user.role === "Employer" ? (
+          {user?.role === "Employer" && (
             <>
-              <li>
-                <Link to={"/job/post"} onClick={() => setShow(false)}>
-                  POST NEW JOB
-                </Link>
-              </li>
-              <li>
-                <Link to={"/job/me"} onClick={() => setShow(false)}>
-                  VIEW YOUR JOBS
-                </Link>
-              </li>
+              <li><Link to="/job/post" onClick={() => setShow(false)}>Post Job</Link></li>
+              <li><Link to="/job/me" onClick={() => setShow(false)}>My Jobs</Link></li>
             </>
-          ) : (
-            <></>
           )}
-
-          <button onClick={handleLogout}>LOGOUT</button>
+          <li>
+            <button className="nav-theme-toggle" onClick={toggleTheme} title="Toggle theme">
+              {theme === "light" ? <FiMoon /> : <FiSun />}
+            </button>
+          </li>
+          <li>
+            <button className="nav-logout" onClick={logout}>Logout</button>
+          </li>
         </ul>
-        <div className="hamburger">
-          <GiHamburgerMenu onClick={() => setShow(!show)} />
+        <div className="nav-hamburger" onClick={() => setShow(!show)}>
+          <GiHamburgerMenu />
         </div>
       </div>
     </nav>

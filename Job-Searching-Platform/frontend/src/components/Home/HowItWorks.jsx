@@ -2,40 +2,30 @@ import React from "react";
 import { FaUserPlus } from "react-icons/fa";
 import { MdFindInPage } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
+import { SectionTitle } from "../../ui";
+import "./HowItWorks.css";
 
-const HowItWorks = () => {
-  return (
-    <>
-      <div className="howitworks">
-        <div className="container">
-          <h3>How Job Works</h3>
-          <div className="banner">
-            <div className="card">
-              <FaUserPlus />
-              <p>Create Account</p>
-              <p>
-                Have to simply create their profile and there after they can apply to different jobs at a single click.
-              </p>
-            </div>
-            <div className="card">
-              <MdFindInPage />
-              <p>Find a Job/Post a Job</p>
-              <p>
-                Find a Job/Post a Job Public and Private sector real-time Job openings across India.
-              </p>
-            </div>
-            <div className="card">
-              <IoMdSend />
-              <p>Apply For Job/Recruit Suitable Candidates</p>
-              <p>
-                Apply For Job/Recruit Suitable Candidates.
-              </p>
-            </div>
+const steps = [
+  { icon: FaUserPlus, title: "Create Account", desc: "Simply create your profile and start applying to different jobs with a single click.", dark: false },
+  { icon: MdFindInPage, title: "Find or Post a Job", desc: "Browse real-time job openings across Public and Private sectors or post your own.", dark: true },
+  { icon: IoMdSend, title: "Apply or Recruit", desc: "Apply for jobs or recruit suitable candidates through our streamlined platform.", dark: false },
+];
+
+const HowItWorks = () => (
+  <div className="howitworks">
+    <div className="hiw-inner">
+      <SectionTitle sub="Simple steps to get started">How It Works</SectionTitle>
+      <div className="hiw-cards">
+        {steps.map(({ icon: Icon, title, desc, dark }, i) => (
+          <div className={`hiw-card ui-card ui-card--${dark ? "dark" : "default"} ${dark ? "hiw-card--dark" : ""}`} key={i}>
+            <div className="hiw-icon"><Icon /></div>
+            <h4>{title}</h4>
+            <p>{desc}</p>
           </div>
-        </div>
+        ))}
       </div>
-    </>
-  );
-};
+    </div>
+  </div>
+);
 
 export default HowItWorks;

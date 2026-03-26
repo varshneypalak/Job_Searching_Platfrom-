@@ -1,0 +1,32 @@
+.notfound {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-2);
+  padding: 40px 24px;
+}
+.notfound .nf-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  text-align: center;
+}
+.notfound .nf-content img {
+  max-width: 400px;
+}
+.notfound .nf-content a {
+  padding: 12px 36px;
+  background: var(--primary);
+  color: var(--white);
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+.notfound .nf-content a:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(79,70,229,0.35);
+}

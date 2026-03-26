@@ -1,8 +1,11 @@
-import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
-import { Context } from "../../main";
+import { useAuth } from "../../hooks/useAuth";
+import * as api from "../../api";
+import { Input, Button } from "../../ui";
+import "./Application.css";
+
 const Application = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -11,18 +14,16 @@ const Application = () => {
   const [address, setAddress] = useState("");
   const [resume, setResume] = useState(null);
 
-  const { isAuthorized, user } = useContext(Context);
-
+  const { isAuthorized, user } = useAuth();
   const navigateTo = useNavigate();
-
-  // Function to handle file input changes
-  const handleFileChange = (event) => {
-    const resume = event.target.files[0];
-    setResume(resume);
-  };
-
   const { id } = useParams();
-  const handleApplication = async (e) => {
+
+  if (!isAuthorized || (user && user.role === "Employer")) {
+    navigateTo("/");
+    return null;
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("name", name);
@@ -32,24 +33,8 @@ const Application = () => {
     formData.append("coverLetter", coverLetter);
     formData.append("resume", resume);
     formData.append("jobId", id);
-
     try {
-      const { data } = await axios.post(
-        "http://localhost:4004/api/v1/application/post",
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setName("");
-      setEmail("");
-      setCoverLetter("");
-      setPhone("");
-      setAddress("");
-      setResume("");
+      const { data } = await api.postApplication(formData);
       toast.success(data.message);
       navigateTo("/job/getall");
     } catch (error) {
@@ -57,58 +42,21 @@ const Application = () => {
     }
   };
 
-  if (!isAuthorized || (user && user.role === "Employer")) {
-    navigateTo("/");
-  }
-
   return (
-    <section className="application">
-      <div className="container">
+    <section className="application-page">
+      <div className="app-inner">
         <h3>Application Form</h3>
-        <form onSubmit={handleApplication}>
-          <input
-            type="text"
-            placeholder="Your Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <input
-            type="email"
-            placeholder="Your Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="number"
-            placeholder="Your Phone Number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Your Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-          <textarea
-            placeholder="CoverLetter..."
-            value={coverLetter}
-            onChange={(e) => setCoverLetter(e.target.value)}
-          />
+        <form className="app-form" onSubmit={handleSubmit}>
+          <Input type="text" placeholder="Your Name" value={name} onChange={(e) => setName(e.target.value)} />
+          <Input type="email" placeholder="Your Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input type="number" placeholder="Your Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <Input type="text" placeholder="Your Address" value={address} onChange={(e) => setAddress(e.target.value)} />
+          <textarea placeholder="Cover Letter..." value={coverLetter} onChange={(e) => setCoverLetter(e.target.value)} />
           <div>
-            <label
-              style={{ textAlign: "start", display: "block", fontSize: "20px" }}
-            >
-              Select Resume
-            </label>
-            <input
-              type="file"
-              accept=".pdf, .jpg, .png"
-              onChange={handleFileChange}
-              style={{ width: "100%" }}
-            />
+            <label className="app-file-label">Select Resume</label>
+            <input type="file" accept=".pdf,.jpg,.png" onChange={(e) => setResume(e.target.files[0])} />
           </div>
-          <button type="submit">Send Application</button>
+          <Button type="submit" block>Send Application</Button>
         </form>
       </div>
     </section>

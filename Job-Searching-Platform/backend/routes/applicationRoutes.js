@@ -1,17 +1,14 @@
 import express from "express";
-import {
-  employerGetAllApplications,
-  jobseekerDeleteApplication,
-  jobseekerGetAllApplications,
-  postApplication,
-} from "../controllers/applicationController.js";
+import { postApplication, employerGetAllApplications, jobseekerGetAllApplications, jobseekerDeleteApplication } from "../controllers/applicationController.js";
 import { isAuthenticated } from "../middlewares/auth.js";
+import { authorize } from "../middlewares/authorize.js";
+import { validatePostApplication } from "../validators/applicationValidator.js";
 
 const router = express.Router();
 
-router.post("/post", isAuthenticated, postApplication);
-router.get("/employer/getall", isAuthenticated, employerGetAllApplications);
-router.get("/jobseeker/getall", isAuthenticated, jobseekerGetAllApplications);
-router.delete("/delete/:id", isAuthenticated, jobseekerDeleteApplication);
+router.post("/post", isAuthenticated, authorize("Job Seeker"), validatePostApplication, postApplication);
+router.get("/employer/getall", isAuthenticated, authorize("Employer"), employerGetAllApplications);
+router.get("/jobseeker/getall", isAuthenticated, authorize("Job Seeker"), jobseekerGetAllApplications);
+router.delete("/delete/:id", isAuthenticated, authorize("Job Seeker"), jobseekerDeleteApplication);
 
 export default router;

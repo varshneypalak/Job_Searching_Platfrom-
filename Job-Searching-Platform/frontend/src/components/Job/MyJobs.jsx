@@ -1,342 +1,108 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
-import { Context } from "../../main";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useAuth } from "../../hooks/useAuth";
+import { useMyJobs } from "../../hooks/useJobs";
+import { JOB_CATEGORIES } from "../../constants";
+import { Button, SectionTitle } from "../../ui";
+import "./MyJobs.css";
 
 const MyJobs = () => {
-  const [myJobs, setMyJobs] = useState([]);
   const [editingMode, setEditingMode] = useState(null);
-  const { isAuthorized, user } = useContext(Context);
-
+  const { isAuthorized, user } = useAuth();
+  const { myJobs, updateJobLocal, saveJob, removeJob } = useMyJobs();
   const navigateTo = useNavigate();
-  //Fetching all jobs
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const { data } = await axios.get(
-          "http://localhost:4004/api/v1/job/getmyjobs",
-          { withCredentials: true }
-        );
-        setMyJobs(data.myJobs);
-      } catch (error) {
-        toast.error(error.response.data.message);
-        setMyJobs([]);
-      }
-    };
-    fetchJobs();
-  }, []);
+
   if (!isAuthorized || (user && user.role !== "Employer")) {
     navigateTo("/");
+    return null;
   }
 
-  //Function For Enabling Editing Mode
-  const handleEnableEdit = (jobId) => {
-    //Here We Are Giving Id in setEditingMode because We want to enable only that job whose ID has been send.
-    setEditingMode(jobId);
-  };
-
-  //Function For Disabling Editing Mode
-  const handleDisableEdit = () => {
-    setEditingMode(null);
-  };
-
-  //Function For Updating The Job
-  const handleUpdateJob = async (jobId) => {
-    const updatedJob = myJobs.find((job) => job._id === jobId);
-    await axios
-      .put(`http://localhost:4004/api/v1/job/update/${jobId}`, updatedJob, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setEditingMode(null);
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
-  };
-
-  //Function For Deleting Job
-  const handleDeleteJob = async (jobId) => {
-    await axios
-      .delete(`http://localhost:4004/api/v1/job/delete/${jobId}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setMyJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message);
-      });
-  };
-
-  const handleInputChange = (jobId, field, value) => {
-    // Update the job object in the jobs state with the new value
-    setMyJobs((prevJobs) =>
-      prevJobs.map((job) =>
-        job._id === jobId ? { ...job, [field]: value } : job
-      )
-    );
+  const handleSave = async (id) => {
+    try { await saveJob(id); setEditingMode(null); }
+    catch (err) { toast.error(err.response.data.message); }
   };
 
   return (
-    <>
-      <div className="myJobs page">
-        <div className="container">
-          <h1>Your Posted Jobs</h1>
-          {myJobs.length > 0 ? (
-            <>
-              <div className="banner">
-                {myJobs.map((element) => (
-                  <div className="card" key={element._id}>
-                    <div className="content">
-                      <div className="short_fields">
-                        <div>
-                          <span>Title:</span>
-                          <input
-                            type="text"
-                            disabled={
-                              editingMode !== element._id ? true : false
-                            }
-                            value={element.title}
-                            onChange={(e) =>
-                              handleInputChange(
-                                element._id,
-                                "title",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-                        <div>
-                          {" "}
-                          <span>Country:</span>
-                          <input
-                            type="text"
-                            disabled={
-                              editingMode !== element._id ? true : false
-                            }
-                            value={element.country}
-                            onChange={(e) =>
-                              handleInputChange(
-                                element._id,
-                                "country",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-                        <div>
-                          <span>City:</span>
-                          <input
-                            type="text"
-                            disabled={
-                              editingMode !== element._id ? true : false
-                            }
-                            value={element.city}
-                            onChange={(e) =>
-                              handleInputChange(
-                                element._id,
-                                "city",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-                        <div>
-                          <span>Category:</span>
-                          <select
-                            value={element.category}
-                            onChange={(e) =>
-                              handleInputChange(
-                                element._id,
-                                "category",
-                                e.target.value
-                              )
-                            }
-                            disabled={
-                              editingMode !== element._id ? true : false
-                            }
-                          >
-                            <option value="">Select Category</option>
-                            <option value="Java Development">Java Development</option>
-                            <option value="Python Development">Python Development</option>
-                            <option value="React Development ">React Development</option>
-                            <option value="PHP Development ">PHP Development</option>
-                            <option value="Software Engineer">Software Engineer</option>
-                            <option value="Frontend Web Development">Frontend Web Development</option>
-                            <option value="Backend Web Development">Backend Web Development</option>
-                            <option value="Full Stack Development">Full Stack Web Development</option>
-                            <option value="Full Stack Development">Full Stack App Development</option>
-                            <option value="Mobile App Development">Mobile App Development</option>
-                            <option value="Web Development">Web Development</option>
-                            <option value="MEAN Stack Development">MEAN STACK Development</option>
-                            <option value="Intern Software Developer">Intern Software Developer</option>
-                            <option value="Intern Web Developer">Intern Web Developer</option>
-                            <option value="Intern App Developer">Intern App Developer</option>
-                            <option value="Data Entry Operator">Data Entry Operator</option>
-                          </select>
-                        </div>
-                        <div>
-                          <span>
-                            Salary:{" "}
-                            {element.fixedSalary ? (
-                              <input
-                                type="number"
-                                disabled={
-                                  editingMode !== element._id ? true : false
-                                }
-                                value={element.fixedSalary}
-                                onChange={(e) =>
-                                  handleInputChange(
-                                    element._id,
-                                    "fixedSalary",
-                                    e.target.value
-                                  )
-                                }
-                              />
-                            ) : (
-                              <div>
-                                <input
-                                  type="number"
-                                  disabled={
-                                    editingMode !== element._id ? true : false
-                                  }
-                                  value={element.salaryFrom}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      element._id,
-                                      "salaryFrom",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                                <input
-                                  type="number"
-                                  disabled={
-                                    editingMode !== element._id ? true : false
-                                  }
-                                  value={element.salaryTo}
-                                  onChange={(e) =>
-                                    handleInputChange(
-                                      element._id,
-                                      "salaryTo",
-                                      e.target.value
-                                    )
-                                  }
-                                />
-                              </div>
-                            )}
-                          </span>
-                        </div>
-                        <div>
-                          {" "}
-                          <span>Expired:</span>
-                          <select
-                            value={element.expired}
-                            onChange={(e) =>
-                              handleInputChange(
-                                element._id,
-                                "expired",
-                                e.target.value
-                              )
-                            }
-                            disabled={
-                              editingMode !== element._id ? true : false
-                            }
-                          >
-                            <option value={true}>TRUE</option>
-                            <option value={false}>FALSE</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div className="long_field">
-                        <div>
-                          <span>Description:</span>{" "}
-                          <textarea
-                            rows={5}
-                            value={element.description}
-                            disabled={
-                              editingMode !== element._id ? true : false
-                            }
-                            onChange={(e) =>
-                              handleInputChange(
-                                element._id,
-                                "description",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-                        <div>
-                          <span>Location: </span>
-                          <textarea
-                            value={element.location}
-                            rows={5}
-                            disabled={
-                              editingMode !== element._id ? true : false
-                            }
-                            onChange={(e) =>
-                              handleInputChange(
-                                element._id,
-                                "location",
-                                e.target.value
-                              )
-                            }
-                          />
-                        </div>
-                      </div>
+    <div className="my-jobs">
+      <div className="mj-inner">
+        <SectionTitle>Your Posted Jobs</SectionTitle>
+        {myJobs.length === 0 ? (
+          <p className="mj-empty">You haven't posted any jobs yet.</p>
+        ) : (
+          <div className="mj-list">
+            {myJobs.map((el) => (
+              <div className="mj-card" key={el._id}>
+                <div className="mj-fields">
+                  <div className="mj-short">
+                    <div>
+                      <span className="mj-field-label">Title</span>
+                      <input type="text" disabled={editingMode !== el._id} value={el.title} onChange={(e) => updateJobLocal(el._id, "title", e.target.value)} />
                     </div>
-                    {/* Out Of Content Class */}
-                    <div className="button_wrapper">
-                      <div className="edit_btn_wrapper">
-                        {editingMode === element._id ? (
-                          <>
-                            <button
-                              onClick={() => handleUpdateJob(element._id)}
-                              className="check_btn"
-                            >
-                              <FaCheck />
-                            </button>
-                            <button
-                              onClick={() => handleDisableEdit()}
-                              className="cross_btn"
-                            >
-                              <RxCross2 />
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            onClick={() => handleEnableEdit(element._id)}
-                            className="edit_btn"
-                          >
-                            Edit
-                          </button>
-                        )}
-                      </div>
-                      <button
-                        onClick={() => handleDeleteJob(element._id)}
-                        className="delete_btn"
-                      >
-                        Delete
-                      </button>
+                    <div>
+                      <span className="mj-field-label">Country</span>
+                      <input type="text" disabled={editingMode !== el._id} value={el.country} onChange={(e) => updateJobLocal(el._id, "country", e.target.value)} />
+                    </div>
+                    <div>
+                      <span className="mj-field-label">City</span>
+                      <input type="text" disabled={editingMode !== el._id} value={el.city} onChange={(e) => updateJobLocal(el._id, "city", e.target.value)} />
+                    </div>
+                    <div>
+                      <span className="mj-field-label">Category</span>
+                      <select value={el.category} disabled={editingMode !== el._id} onChange={(e) => updateJobLocal(el._id, "category", e.target.value)}>
+                        <option value="">Select Category</option>
+                        {JOB_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <span className="mj-field-label">Salary</span>
+                      {el.fixedSalary ? (
+                        <input type="number" disabled={editingMode !== el._id} value={el.fixedSalary} onChange={(e) => updateJobLocal(el._id, "fixedSalary", e.target.value)} />
+                      ) : (
+                        <>
+                          <input type="number" disabled={editingMode !== el._id} value={el.salaryFrom} onChange={(e) => updateJobLocal(el._id, "salaryFrom", e.target.value)} />
+                          <input type="number" disabled={editingMode !== el._id} value={el.salaryTo} onChange={(e) => updateJobLocal(el._id, "salaryTo", e.target.value)} />
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      <span className="mj-field-label">Expired</span>
+                      <select value={el.expired} disabled={editingMode !== el._id} onChange={(e) => updateJobLocal(el._id, "expired", e.target.value)}>
+                        <option value={true}>TRUE</option>
+                        <option value={false}>FALSE</option>
+                      </select>
                     </div>
                   </div>
-                ))}
+                  <div className="mj-long">
+                    <div>
+                      <span className="mj-field-label">Description</span>
+                      <textarea rows={4} disabled={editingMode !== el._id} value={el.description} onChange={(e) => updateJobLocal(el._id, "description", e.target.value)} />
+                    </div>
+                    <div>
+                      <span className="mj-field-label">Location</span>
+                      <textarea rows={3} disabled={editingMode !== el._id} value={el.location} onChange={(e) => updateJobLocal(el._id, "location", e.target.value)} />
+                    </div>
+                  </div>
+                </div>
+                <div className="mj-actions">
+                  {editingMode === el._id ? (
+                    <div className="mj-edit-row">
+                      <Button variant="accent" onClick={() => handleSave(el._id)}><FaCheck /></Button>
+                      <Button variant="ghost" onClick={() => setEditingMode(null)}><RxCross2 /></Button>
+                    </div>
+                  ) : (
+                    <Button variant="secondary" onClick={() => setEditingMode(el._id)}>Edit</Button>
+                  )}
+                  <Button variant="danger" onClick={() => removeJob(el._id)}>Delete</Button>
+                </div>
               </div>
-            </>
-          ) : (
-            <p>
-              You ve not posted any job or may be you deleted all of your jobs!
-            </p>
-          )}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

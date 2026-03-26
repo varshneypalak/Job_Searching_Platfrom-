@@ -1,72 +1,42 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Context } from "../../main";
+import React from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useJobDetail } from "../../hooks/useJobs";
+import "./JobDetails.css";
+
 const JobDetails = () => {
   const { id } = useParams();
-  const [job, setJob] = useState({});
   const navigateTo = useNavigate();
+  const { isAuthorized, user } = useAuth();
+  const { job, error } = useJobDetail(id);
 
-  const { isAuthorized, user } = useContext(Context);
+  if (!isAuthorized) { navigateTo("/login"); return null; }
+  if (error) { navigateTo("/notfound"); return null; }
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:4004/api/v1/job/${id}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setJob(res.data.job);
-      })
-      .catch((error) => {
-        navigateTo("/notfound");
-      });
-  }, []);
-
-  if (!isAuthorized) {
-    navigateTo("/login");
-  }
+  const rows = [
+    ["Title", job.title],
+    ["Category", job.category],
+    ["Country", job.country],
+    ["City", job.city],
+    ["Location", job.location],
+    ["Description", job.description],
+    ["Posted On", job.jobPostedOn],
+    ["Salary", job.fixedSalary ? job.fixedSalary : `${job.salaryFrom} - ${job.salaryTo}`],
+  ];
 
   return (
-    <section className="jobDetail page">
-      <div className="container">
-        <h3>Job Details</h3>
-        <div className="banner">
-          <p>
-            Title: <span> {job.title}</span>
-          </p>
-          <p>
-            Category: <span>{job.category}</span>
-          </p>
-          <p>
-            Country: <span>{job.country}</span>
-          </p>
-          <p>
-            City: <span>{job.city}</span>
-          </p>
-          <p>
-            Location: <span>{job.location}</span>
-          </p>
-          <p>
-            Description: <span>{job.description}</span>
-          </p>
-          <p>
-            Job Posted On: <span>{job.jobPostedOn}</span>
-          </p>
-          <p>
-            Salary:{" "}
-            {job.fixedSalary ? (
-              <span>{job.fixedSalary}</span>
-            ) : (
-              <span>
-                {job.salaryFrom} - {job.salaryTo}
-              </span>
-            )}
-          </p>
-          {user && user.role === "Employer" ? (
-            <></>
-          ) : (
-            <Link to={`/application/${job._id}`}>Apply Now</Link>
+    <section className="job-detail">
+      <div className="detail-inner">
+        <div className="detail-card">
+          <h3>Job Details</h3>
+          {rows.map(([label, value]) => (
+            <div className="detail-row" key={label}>
+              <span className="detail-label">{label}:</span>
+              <span className="detail-value">{value}</span>
+            </div>
+          ))}
+          {user?.role !== "Employer" && (
+            <Link to={`/application/${job._id}`} className="detail-apply">Apply Now</Link>
           )}
         </div>
       </div>

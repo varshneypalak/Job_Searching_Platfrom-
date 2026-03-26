@@ -1,0 +1,62 @@
+.application-page {
+  min-height: 100vh;
+  padding: 48px 24px;
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+}
+.application-page .app-inner {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 48px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+.application-page .app-inner h3 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 32px;
+}
+.application-page .app-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+.application-page .app-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  min-height: 140px;
+  outline: none;
+  transition: all var(--transition);
+  background: var(--input-bg);
+  color: var(--text-primary);
+}
+.application-page .app-form textarea:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 4px rgba(79,70,229,0.1);
+}
+.application-page .app-file-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gray-1);
+  display: block;
+  margin-bottom: 6px;
+}
+.application-page .app-form input[type="file"] {
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--gray-2);
+}
+
+@media (max-width: 600px) {
+  .application-page .app-inner { padding: 28px 20px; }
+}

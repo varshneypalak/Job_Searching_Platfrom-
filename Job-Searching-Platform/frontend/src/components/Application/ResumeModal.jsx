@@ -1,16 +1,10 @@
 import React from "react";
+import { Modal } from "../../ui";
 
-const ResumeModal = ({ imageUrl, onClose }) => {
-  return (
-    <div className="resume-modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>
-          &times;
-        </span>
-        <img src={imageUrl} alt="resume" />
-      </div>
-    </div>
-  );
-};
+const ResumeModal = ({ imageUrl, onClose }) => (
+  <Modal onClose={onClose}>
+    <img src={imageUrl} alt="resume" style={{ maxWidth: "500px", height: "auto" }} />
+  </Modal>
+);
 
 export default ResumeModal;

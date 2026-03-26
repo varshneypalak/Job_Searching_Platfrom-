@@ -1,66 +1,36 @@
 import React from "react";
-import { FaBuilding, FaSuitcase, FaUsers, FaUserPlus } from "react-icons/fa";
+import { HERO_STATS } from "../../constants";
+import "./HeroSection.css";
 
-const HeroSection = () => {
-  const details = [
-    {
-      id: 1,
-      title: "1,23,441",
-      subTitle: "Live Job",
-      icon: <FaSuitcase />,
-    },
-    {
-      id: 2,
-      title: "91220",
-      subTitle: "Companies",
-      icon: <FaBuilding />,
-    },
-    {
-      id: 3,
-      title: "2,34,200",
-      subTitle: "Job Seekers",
-      icon: <FaUsers />,
-    },
-    {
-      id: 4,
-      title: "1,03,761",
-      subTitle: "Employers",
-      icon: <FaUserPlus />,
-    },
-  ];
-  return (
-    <>
-      <div className="heroSection">
-        <div className="container">
-          <div className="title">
-            <h1>Find a job that suits</h1>
-            <h1>your interests and skills</h1>
-            <p>
-            It is a dedicated job portal for Job.com.<br/>
-            It provides information about Government, Public and Private sector real-time Job openings across India. have to simply create their profile and thereafter they can apply to different jobs at a single click. The platform also offers them a customized dashboard to check updates of different jobs that they have applied for. 
-            The platform also provides facilities to conduct jobfairs and organize online interviews.
-            </p>
-          </div>
-          <div className="image">
-            <img src="/heroS.png" alt="hero" />
-          </div>
-        </div>
-        <div className="details">
-          {details.map((element) => {
-            return (
-              <div className="card" key={element.id}>
-                <div className="icon">{element.icon}</div>
-                <div className="content">
-                  <p>{element.title}</p>
-                  <p>{element.subTitle}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+const HeroSection = () => (
+  <div className="hero">
+    <div className="hero-inner">
+      <div className="hero-text">
+        <h1>
+          Find a Job That <span>Suits Your Skills</span>
+        </h1>
+        <p>
+          A dedicated job portal providing real-time Government, Public and
+          Private sector job openings across India. Create your profile and
+          apply to multiple jobs with a single click.
+        </p>
       </div>
-    </>
-  );
-};
+      <div className="hero-image">
+        <img src="/heroS.png" alt="hero" />
+      </div>
+    </div>
+    <div className="hero-stats">
+      {HERO_STATS.map(({ id, title, subTitle, icon: Icon }) => (
+        <div className="hero-stat-card" key={id}>
+          <div className="stat-icon"><Icon /></div>
+          <div className="stat-info">
+            <p>{title}</p>
+            <p>{subTitle}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
 
 export default HeroSection;
