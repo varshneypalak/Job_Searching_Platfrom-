@@ -19,7 +19,7 @@
 .notfound .nf-content a {
   padding: 12px 36px;
   background: var(--primary);
-  color: var(--white);
+  color: var(--always-white);
   border-radius: var(--radius-lg);
   font-weight: 700;
   font-size: 1rem;

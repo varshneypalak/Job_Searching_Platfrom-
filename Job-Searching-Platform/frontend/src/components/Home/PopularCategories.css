@@ -2,53 +2,67 @@
   padding: 80px 24px;
   background: var(--surface-2);
 }
-.categories .cat-inner {
-  max-width: 1280px;
+.cat-inner {
+  max-width: 1000px;
   margin: 0 auto;
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 44px;
+}
+.cat-card {
   display: flex;
   flex-direction: column;
-  gap: 40px;
-}
-.categories .cat-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-}
-.categories .cat-card {
-  display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 20px;
+  text-align: center;
+  gap: 12px;
+  padding: 32px 20px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   transition: all var(--transition);
   cursor: pointer;
 }
-.categories .cat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+.cat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
   border-color: var(--primary-light);
 }
-.categories .cat-card .cat-icon {
-  font-size: 1.4rem;
-  color: var(--primary);
-  background: rgba(79,70,229,0.08);
-  padding: 12px;
-  border-radius: var(--radius-sm);
+.cat-icon {
+  font-size: 1.8rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.categories .cat-card .cat-text p:first-child {
-  font-weight: 600;
-  font-size: 0.95rem;
+.cat-title {
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--text-primary);
 }
-.categories .cat-card .cat-text p:last-child {
-  font-size: 0.82rem;
-  color: var(--gray-2);
-  margin-top: 3px;
+.cat-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.cat-footer {
+  text-align: center;
+  margin-top: 36px;
+}
+.cat-view-all {
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all var(--transition);
+}
+.cat-view-all:hover {
+  color: var(--primary-dark);
+  letter-spacing: 0.5px;
 }
 
-@media (max-width: 1100px) { .categories .cat-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 768px) { .categories .cat-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .categories .cat-grid { grid-template-columns: 1fr; } }
+@media (max-width: 768px) { .cat-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .cat-grid { grid-template-columns: 1fr; } }

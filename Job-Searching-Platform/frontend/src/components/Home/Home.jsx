@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 import HeroSection from "./HeroSection";
 import HowItWorks from "./HowItWorks";
 import PopularCategories from "./PopularCategories";
-import PopularCompanies from "./PopularCompanies";
+import CTABanner from "./CTABanner";
 
 const Home = () => {
   const { isAuthorized } = useAuth();
@@ -15,7 +15,7 @@ const Home = () => {
       <HeroSection />
       <HowItWorks />
       <PopularCategories />
-      <PopularCompanies />
+      <CTABanner />
     </>
   );
 };

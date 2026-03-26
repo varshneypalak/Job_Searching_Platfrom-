@@ -9,7 +9,7 @@ import { FaReact, FaMicrosoft, FaApple, FaGoogle, FaSuitcase, FaBuilding, FaUser
 import { GiArtificialIntelligence } from "react-icons/gi";
 import { IoGameController } from "react-icons/io5";
 
-export const API_BASE = "http://localhost:4004/api/v1";
+export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4004/api/v1";
 
 export const JOB_CATEGORIES = [
   "Java Development",

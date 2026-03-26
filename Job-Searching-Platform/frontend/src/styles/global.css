@@ -38,6 +38,10 @@
   --nav-bg: rgba(15, 23, 42, 0.85);
   --nav-text: var(--gray-3);
   --footer-bg: var(--dark);
+  --always-white: #ffffff;
+  --always-dark: #0f172a;
+  --btn-primary-text: #ffffff;
+  --select-arrow: %2364748b;
 }
 
 /* ===== DARK THEME ===== */
@@ -62,6 +66,10 @@
   --nav-bg: rgba(11, 17, 32, 0.92);
   --nav-text: #94a3b8;
   --footer-bg: #0b1120;
+  --always-white: #ffffff;
+  --always-dark: #0f172a;
+  --btn-primary-text: #ffffff;
+  --select-arrow: %23e2e8f0;
 
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 20px rgba(0,0,0,0.4);

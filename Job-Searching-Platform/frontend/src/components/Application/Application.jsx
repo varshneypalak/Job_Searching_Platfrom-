@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import * as api from "../../api";
 import { Input, Button } from "../../ui";
@@ -15,12 +15,10 @@ const Application = () => {
   const [resume, setResume] = useState(null);
 
   const { isAuthorized, user } = useAuth();
-  const navigateTo = useNavigate();
   const { id } = useParams();
 
   if (!isAuthorized || (user && user.role === "Employer")) {
-    navigateTo("/");
-    return null;
+    return <Navigate to="/" />;
   }
 
   const handleSubmit = async (e) => {

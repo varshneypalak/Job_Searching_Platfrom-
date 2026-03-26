@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import * as api from "../api";
 
 export const useJobs = () => {
@@ -9,7 +8,7 @@ export const useJobs = () => {
   useEffect(() => {
     api.getAllJobs()
       .then((res) => setJobs(res.data.jobs || []))
-      .catch((err) => console.log(err))
+      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
@@ -36,11 +35,8 @@ export const useMyJobs = () => {
 
   useEffect(() => {
     api.getMyJobs()
-      .then(({ data }) => setMyJobs(data.myJobs))
-      .catch((error) => {
-        toast.error(error.response.data.message);
-        setMyJobs([]);
-      });
+      .then(({ data }) => setMyJobs(data.myJobs || []))
+      .catch(() => setMyJobs([]));
   }, []);
 
   const updateJobLocal = (jobId, field, value) => {
@@ -50,13 +46,13 @@ export const useMyJobs = () => {
   const saveJob = async (jobId) => {
     const job = myJobs.find((j) => j._id === jobId);
     const { data } = await api.updateJob(jobId, job);
-    toast.success(data.message);
+    return data;
   };
 
   const removeJob = async (jobId) => {
     const { data } = await api.deleteJob(jobId);
-    toast.success(data.message);
     setMyJobs((prev) => prev.filter((j) => j._id !== jobId));
+    return data;
   };
 
   return { myJobs, updateJobLocal, saveJob, removeJob };

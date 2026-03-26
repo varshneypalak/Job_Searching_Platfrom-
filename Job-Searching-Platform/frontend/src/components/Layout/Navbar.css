@@ -21,7 +21,7 @@
 .navbar .nav-logo {
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--white);
+  color: var(--always-white);
   letter-spacing: -0.5px;
 }
 .navbar .nav-logo span {
@@ -35,7 +35,7 @@
   align-items: center;
 }
 .navbar .nav-menu li a {
-  color: var(--gray-3);
+  color: var(--nav-text);
   font-weight: 500;
   font-size: 0.95rem;
   transition: color var(--transition);
@@ -53,7 +53,7 @@
   transition: width var(--transition);
 }
 .navbar .nav-menu li a:hover {
-  color: var(--white);
+  color: var(--always-white);
 }
 .navbar .nav-menu li a:hover::after {
   width: 100%;
@@ -62,7 +62,7 @@
   padding: 8px 20px;
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
-  color: var(--white);
+  color: var(--always-white);
   border-radius: var(--radius-md);
   font-size: 0.9rem;
   font-weight: 600;
@@ -77,13 +77,13 @@
 .navbar .nav-hamburger {
   display: none;
   font-size: 1.8rem;
-  color: var(--white);
+  color: var(--always-white);
   cursor: pointer;
 }
 .navbar .nav-theme-toggle {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
-  color: var(--white);
+  color: var(--always-white);
   border-radius: var(--radius-md);
   width: 40px;
   height: 40px;

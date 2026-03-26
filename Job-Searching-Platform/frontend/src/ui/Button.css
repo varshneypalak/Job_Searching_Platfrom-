@@ -17,7 +17,7 @@
 
 .ui-btn--primary {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: var(--white);
+  color: var(--btn-primary-text);
   box-shadow: 0 4px 15px rgba(79,70,229,0.35);
 }
 .ui-btn--primary:hover {
@@ -32,13 +32,13 @@
 }
 .ui-btn--secondary:hover {
   background: var(--primary);
-  color: var(--white);
+  color: var(--btn-primary-text);
   transform: translateY(-2px);
 }
 
 .ui-btn--danger {
   background: linear-gradient(135deg, var(--danger), #dc2626);
-  color: var(--white);
+  color: var(--btn-primary-text);
   box-shadow: 0 4px 15px rgba(239,68,68,0.3);
 }
 .ui-btn--danger:hover {
@@ -58,7 +58,7 @@
 
 .ui-btn--accent {
   background: linear-gradient(135deg, var(--accent), #0891b2);
-  color: var(--white);
+  color: var(--btn-primary-text);
   box-shadow: 0 4px 15px rgba(6,182,212,0.35);
 }
 .ui-btn--accent:hover {

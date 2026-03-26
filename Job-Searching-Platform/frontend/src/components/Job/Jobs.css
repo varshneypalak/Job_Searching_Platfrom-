@@ -53,7 +53,7 @@
   padding: 10px;
   text-align: center;
   background: var(--primary);
-  color: var(--white);
+  color: var(--always-white);
   border-radius: var(--radius-md);
   font-weight: 600;
   font-size: 0.95rem;

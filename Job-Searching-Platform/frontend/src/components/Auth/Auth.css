@@ -46,7 +46,7 @@
 }
 .auth-page .auth-form .auth-link:hover {
   background: var(--primary);
-  color: var(--white);
+  color: var(--btn-primary-text);
 }
 
 .auth-page .auth-theme-toggle {

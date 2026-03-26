@@ -31,5 +31,7 @@ export const useAuth = () => {
     }
   };
 
-  return { isAuthorized, user, login, register, logout };
+  const setAuthorized = (val) => setIsAuthorized(val);
+
+  return { isAuthorized, user, login, register, logout, setAuthorized };
 };

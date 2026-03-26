@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useApplications } from "../../hooks/useApplications";
 import { Button, Modal, SectionTitle } from "../../ui";
@@ -9,9 +9,8 @@ const MyApplications = () => {
   const { isAuthorized, user } = useAuth();
   const { applications, remove } = useApplications(user?.role);
   const [resumeUrl, setResumeUrl] = useState(null);
-  const navigateTo = useNavigate();
 
-  if (!isAuthorized) { navigateTo("/"); return null; }
+  if (!isAuthorized) return <Navigate to="/" />;
 
   const isEmployer = user?.role === "Employer";
 

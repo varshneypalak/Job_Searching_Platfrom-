@@ -36,6 +36,9 @@ const PostJob = () => {
     try {
       const { data } = await api.postJob(payload);
       toast.success(data.message);
+      setTitle(""); setDescription(""); setCategory(""); setCountry("");
+      setCity(""); setLocation(""); setSalaryFrom(""); setSalaryTo("");
+      setFixedSalary(""); setSalaryType("default");
     } catch (err) {
       toast.error(err.response.data.message);
     }
