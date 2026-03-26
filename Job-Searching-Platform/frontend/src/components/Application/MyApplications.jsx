@@ -7,7 +7,7 @@ import "./MyApplications.css";
 
 const MyApplications = () => {
   const { isAuthorized, user } = useAuth();
-  const { applications, remove } = useApplications(user?.role);
+  const { applications, loading, remove } = useApplications(user?.role);
   const [resumeUrl, setResumeUrl] = useState(null);
 
   if (!isAuthorized) return <Navigate to="/" />;
@@ -18,8 +18,17 @@ const MyApplications = () => {
     <section className="my-apps">
       <div className="ma-inner">
         <SectionTitle>{isEmployer ? "Applications From Job Seekers" : "My Applications"}</SectionTitle>
-        {applications.length === 0 ? (
-          <p className="ma-empty">No Applications Found</p>
+        {loading ? (
+          <div className="ma-loading">
+            <div className="spinner" />
+            <p>Loading applications...</p>
+          </div>
+        ) : applications.length === 0 ? (
+          <div className="ma-empty-state">
+            <p className="ma-empty-icon">📋</p>
+            <h3>No Applications Found</h3>
+            <p>{isEmployer ? "No one has applied to your jobs yet." : "You haven't applied to any jobs yet."}</p>
+          </div>
         ) : (
           applications.map((el) => (
             <div className="ma-card" key={el._id}>

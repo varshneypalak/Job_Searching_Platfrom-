@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../../hooks/useAuth";
 import { useMyJobs } from "../../hooks/useJobs";
@@ -12,25 +12,46 @@ import "./MyJobs.css";
 const MyJobs = () => {
   const [editingMode, setEditingMode] = useState(null);
   const { isAuthorized, user } = useAuth();
-  const { myJobs, updateJobLocal, saveJob, removeJob } = useMyJobs();
-  const navigateTo = useNavigate();
+  const { myJobs, loading, updateJobLocal, saveJob, removeJob } = useMyJobs();
 
   if (!isAuthorized || (user && user.role !== "Employer")) {
-    navigateTo("/");
-    return null;
+    return <Navigate to="/" />;
   }
 
   const handleSave = async (id) => {
-    try { await saveJob(id); setEditingMode(null); }
-    catch (err) { toast.error(err.response.data.message); }
+    try {
+      await saveJob(id);
+      toast.success("Job Updated!");
+      setEditingMode(null);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to update");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await removeJob(id);
+      toast.success("Job Deleted!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to delete");
+    }
   };
 
   return (
     <div className="my-jobs">
       <div className="mj-inner">
         <SectionTitle>Your Posted Jobs</SectionTitle>
-        {myJobs.length === 0 ? (
-          <p className="mj-empty">You haven't posted any jobs yet.</p>
+        {loading ? (
+          <div className="mj-loading">
+            <div className="spinner" />
+            <p>Loading your jobs...</p>
+          </div>
+        ) : myJobs.length === 0 ? (
+          <div className="mj-empty-state">
+            <p className="mj-empty-icon">💼</p>
+            <h3>No Jobs Posted Yet</h3>
+            <p>Start by posting your first job listing.</p>
+          </div>
         ) : (
           <div className="mj-list">
             {myJobs.map((el) => (
@@ -95,7 +116,7 @@ const MyJobs = () => {
                   ) : (
                     <Button variant="secondary" onClick={() => setEditingMode(el._id)}>Edit</Button>
                   )}
-                  <Button variant="danger" onClick={() => removeJob(el._id)}>Delete</Button>
+                  <Button variant="danger" onClick={() => handleDelete(el._id)}>Delete</Button>
                 </div>
               </div>
             ))}

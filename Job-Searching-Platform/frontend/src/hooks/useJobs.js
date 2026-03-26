@@ -32,11 +32,13 @@ export const useJobDetail = (id) => {
 
 export const useMyJobs = () => {
   const [myJobs, setMyJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     api.getMyJobs()
       .then(({ data }) => setMyJobs(data.myJobs || []))
-      .catch(() => setMyJobs([]));
+      .catch(() => setMyJobs([]))
+      .finally(() => setLoading(false));
   }, []);
 
   const updateJobLocal = (jobId, field, value) => {
@@ -55,5 +57,5 @@ export const useMyJobs = () => {
     return data;
   };
 
-  return { myJobs, updateJobLocal, saveJob, removeJob };
+  return { myJobs, loading, updateJobLocal, saveJob, removeJob };
 };

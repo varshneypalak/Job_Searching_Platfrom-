@@ -20,14 +20,14 @@ export const createUser = async ({ name, email, phone, password, role }) => {
 export const verifyCredentials = async (email, password, role) => {
   const user = await findUserWithPassword(email);
   if (!user) {
-    throw new ErrorHandler("Invalid Email Or Password.", 400);
+    throw new ErrorHandler("No account found with this email. Please register first!", 400);
   }
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
-    throw new ErrorHandler("Invalid Email Or Password.", 400);
+    throw new ErrorHandler("Incorrect password. Please try again.", 400);
   }
   if (user.role !== role) {
-    throw new ErrorHandler(`User with provided email and ${role} not found!`, 404);
+    throw new ErrorHandler(`This email is registered as ${user.role}, not ${role}.`, 404);
   }
   return user;
 };

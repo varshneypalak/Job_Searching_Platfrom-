@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import * as api from "../../api";
 import { Input, Button } from "../../ui";
@@ -13,8 +13,10 @@ const Application = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [resume, setResume] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const { isAuthorized, user } = useAuth();
+  const navigateTo = useNavigate();
   const { id } = useParams();
 
   if (!isAuthorized || (user && user.role === "Employer")) {
@@ -23,6 +25,7 @@ const Application = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
     const formData = new FormData();
     formData.append("name", name);
     formData.append("email", email);
@@ -36,7 +39,9 @@ const Application = () => {
       toast.success(data.message);
       navigateTo("/job/getall");
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Failed to submit application");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -54,7 +59,9 @@ const Application = () => {
             <label className="app-file-label">Select Resume</label>
             <input type="file" accept=".pdf,.jpg,.png" onChange={(e) => setResume(e.target.files[0])} />
           </div>
-          <Button type="submit" block>Send Application</Button>
+          <Button type="submit" block disabled={submitting}>
+            {submitting ? "Submitting..." : "Send Application"}
+          </Button>
         </form>
       </div>
     </section>

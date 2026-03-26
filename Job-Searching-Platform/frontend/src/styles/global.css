@@ -99,6 +99,17 @@ a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 img { max-width: 100%; display: block; }
 
+/* Global dropdown dark mode fix */
+[data-theme="dark"] select {
+  background-color: #162032;
+  color: #e2e8f0;
+  border-color: #293548;
+}
+[data-theme="dark"] select option {
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }

@@ -1,26 +1,25 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import * as api from "../api";
 
 export const useApplications = (role) => {
   const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!role) return;
+    if (!role) { setLoading(false); return; }
     const fetcher = role === "Employer" ? api.getEmployerApplications : api.getJobSeekerApplications;
     fetcher()
-      .then((res) => setApplications(res.data.applications))
-      .catch((error) => toast.error(error.response.data.message));
+      .then((res) => setApplications(res.data.applications || []))
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, [role]);
 
-  const remove = (id) => {
-    api.deleteApplication(id)
-      .then((res) => {
-        toast.success(res.data.message);
-        setApplications((prev) => prev.filter((a) => a._id !== id));
-      })
-      .catch((error) => toast.error(error.response.data.message));
+  const remove = async (id) => {
+    try {
+      await api.deleteApplication(id);
+      setApplications((prev) => prev.filter((a) => a._id !== id));
+    } catch (e) { /* silent */ }
   };
 
-  return { applications, remove };
+  return { applications, loading, remove };
 };

@@ -1,17 +1,27 @@
 import React from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useJobDetail } from "../../hooks/useJobs";
 import "./JobDetails.css";
 
 const JobDetails = () => {
   const { id } = useParams();
-  const navigateTo = useNavigate();
   const { isAuthorized, user } = useAuth();
-  const { job, error } = useJobDetail(id);
+  const { job, loading, error } = useJobDetail(id);
 
-  if (!isAuthorized) { navigateTo("/login"); return null; }
-  if (error) { navigateTo("/notfound"); return null; }
+  if (!isAuthorized) return <Navigate to="/login" />;
+  if (error) return <Navigate to="/notfound" />;
+
+  if (loading) {
+    return (
+      <section className="job-detail">
+        <div className="detail-loading">
+          <div className="spinner" />
+          <p>Loading job details...</p>
+        </div>
+      </section>
+    );
+  }
 
   const rows = [
     ["Title", job.title],
@@ -20,8 +30,8 @@ const JobDetails = () => {
     ["City", job.city],
     ["Location", job.location],
     ["Description", job.description],
-    ["Posted On", job.jobPostedOn],
-    ["Salary", job.fixedSalary ? job.fixedSalary : `${job.salaryFrom} - ${job.salaryTo}`],
+    ["Posted On", job.jobPostedOn ? new Date(job.jobPostedOn).toLocaleDateString() : ""],
+    ["Salary", job.fixedSalary ? `₹${job.fixedSalary.toLocaleString()}` : `₹${job.salaryFrom?.toLocaleString()} - ₹${job.salaryTo?.toLocaleString()}`],
   ];
 
   return (
